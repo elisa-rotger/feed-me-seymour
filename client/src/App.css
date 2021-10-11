@@ -1,151 +1,88 @@
-.App {
-display: grid;
-justify-content: center;
+* {
+  box-sizing: border-box;
 }
-/* .title {
-display: grid;
-justify-content: center;
-} */
+
+.App {
+  display: grid;
+  justify-content: center;
+}
+
+.parent {
+  padding: 0 2em;
+}
+
+.card-header {
+  background: #90a76c;
+  color: rgb(53, 50, 50);
+  padding-top: .5em;
+  margin-top: .5em;
+}
 
 .title {
   display: block;
   text-align: center;
 }
 
-/* input[type=text]:focus {
-  border: 3px solid rgb(94, 98, 150);
-} */
-
-.card {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px rgb(35, 54, 5) solid;
-  margin: 3mm;
-  text-align: center;
-  background-color: rgb(26, 114, 45);
-}
-
-.header {
-  height: 30%;
-  background: #90a76c;
-  color: rgb(53, 50, 50);
-  text-align: center;
-  padding-bottom: .5em;
-  padding-top: .5em;
-  margin-top: 1em;
-}
+/* Add form */
 
 .grid-container {
-  display: flex;
-  width: 100%;
-  align-content: center;
-  align-items: center;
-  flex-wrap:wrap-reverse;
-  gap: 80px;
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
-  margin-left: 1em;
-  padding-left: 1em;
-  padding-right:1em;
+  margin: 2em 1em;
+  padding: 1em;
   border: 4px rgb(35, 54, 5) dashed;
-  color:#1d5e25;
-  box-shadow:lawngreen;
+  /* color:#1d5e25;
+  box-shadow:lawngreen; */
   border-radius: 25px
 }
 
-.email-notify {
+.form-container {
+  display: grid;
+}
+
+.form-input {
   display: flex;
-  width: 100%;
-  align-items: center;
-  flex-wrap:wrap-reverse;
-  gap: 8px;
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
-  margin-left: 1em;
-  padding-left: 1em;
-  padding-right:1em;
-  color: #1d5e25;
-  border:4px rgb(35, 54, 5) dashed;
-  box-shadow:lawngreen;
-  border-radius: 25px
-}
-
-.to2 {
-  margin-bottom: 20px;
-  padding-left: 1em;
-  padding-top: 1em;
+  gap: 2em;
   font-weight: bold;
+  padding: 1em;
 }
 
-.email {
-  margin-bottom: 20px;
-  padding-left: em;
-  padding-top: 1em;
-  font-weight: bold;
-}
-
-.submit {
-  display:flex;
-  justify-content:right;
-  margin-bottom: 1em; 
-  margin-left: 40em;
-}
-
-input{
-  margin-bottom: 20px;
-  margin-left:50mm;
-  margin-right:50mm;
-  padding-left: 10mm;
-}
-
-.email2{
-  margin-bottom: 20px;
-  margin-left:50mm;
-  margin-right:50mm;
-  padding-left: 10mm;
-}
-
-.to-box{
-  margin-bottom: 20px;
-  margin-left:50mm;
-  margin-right:50mm;
-  padding-left: 10mm;
+.form-input span {
+  width: 8em;
 }
 
 .submit-btn {
-  display:flex;
-  justify-content:right;
-  margin-bottom: 1em; 
-  margin-left: 85%;
+  width: 10%;
+  padding: 0.5em 0;
+  justify-self: end;
 }
 
-legend h3 {
-  padding-top: 1em;
-  padding-left: 1em;
-  padding-bottom: 1em;
+/**/
+
+.card-deck {
+  flex-wrap: wrap;
 }
 
-.plantadd {
-  padding-left: 1em;
-  padding-top: 1em;
-  font-weight: bold;
+.card-deck {
+  margin: 0 1.5em;
 }
 
-.usernameadd {
-  padding-left: 1em;
-  padding-bottom: 1em;
-  font-weight: bold;
+.card {
+  flex-direction: column;
+  border: 1px rgb(35, 54, 5) solid;
+  text-align: center;
+  background-color: rgb(26, 114, 45);
+  width: 20%;
 }
 
-/* 
-.featured-container {
-  display: block;
-  align-items: center;
-  order: 5;
-  gap: 50px;
-  margin: 25px;
+/* .watered-button {
+  background-color: red;
 } */
+
+.watered-button:focus {     
+  background-color:green;    
+}
+
+
+/* Navbar */
 
 nav ul {
   list-style: none;
@@ -160,13 +97,19 @@ nav ul {
   text-decoration: none;
 }
 
-/* .watered-button {
-  background-color: red;
-} */
-
-.watered-button:focus {     
-  background-color:green;    
+ul {
+  list-style-type: none;
 }
+
+
+/* 
+.featured-container {
+  display: block;
+  align-items: center;
+  order: 5;
+  gap: 50px;
+  margin: 25px;
+} */
 
 
 /* 
@@ -184,7 +127,3 @@ nav ul {
   font-size: calc(10px + 2vmin);
   color: white;
 } */
-
-ul {
-  list-style-type: none;
-}

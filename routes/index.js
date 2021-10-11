@@ -14,10 +14,10 @@ async function plantExists(plantId) {
   return result.data.length === 1;
 }
 
-// /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.send({ title: 'Express' });
-// });
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.send({ title: 'Express' });
+});
 
 /* GET plant list. */
 router.get('/:plants', async function(req, res, next) {
