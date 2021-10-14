@@ -34,6 +34,10 @@
   border-radius: 25px
 }
 
+#plant-container {
+  grid-template-columns: 1fr 1fr;
+}
+
 .form-container {
   display: grid;
 }
@@ -46,13 +50,17 @@
 }
 
 .form-input span {
-  width: 8em;
+  width: 10em;
 }
 
 .submit-btn {
   width: 10%;
   padding: 0.5em 0;
   justify-self: end;
+}
+
+#plant-btn {
+  grid-column: span 2;
 }
 
 /**/
@@ -76,6 +84,7 @@
 
 #card {
   flex: none;
+  margin-bottom: 1em;
 }
 
 /* .watered-button {

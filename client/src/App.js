@@ -6,7 +6,14 @@ import  Modal from'./Component/Modal';
 
 function App() {
   let [plants, setPlants] = useState([]);
-  const formInitialState = {plantId: "", plantName: "", username: "", wateringFrequency: "", isWatered: "", lastWatered:"" };
+  const formInitialState = {
+    plantId: "", 
+    plantName: "", 
+    username: "", 
+    wateringFrequency: "", 
+    isWatered: "", 
+    lastWatered:"" 
+  };
   const [formData, setFormData] = useState(formInitialState); 
   // const currentTime = new Date();
   // const timestamp = currentTime.toLocaleString('en-US', { timeZone: 'America/Chicago' });
@@ -47,15 +54,15 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    addPlant(formData.plantName, formData.username);
+    addPlant(formData.plantName, formData.username, formData.wateringFrequency);
     // setPlants((state) => [...state]);
     setFormData(formInitialState);
   };
 
-  const addPlant = async (plantName, username) => {
-    //console.log(plantName)
+  const addPlant = async (plantName, username, wateringFrequency) => {
+    // console.log(plantName)
     // console.log(plants);
-    let plant = { plantName, username };
+    let plant = { plantName, username, wateringFrequency };
     let options = {
       method: "POST",
       headers: { 
@@ -66,7 +73,7 @@ function App() {
 
     try {
       await fetch("/plants", options);
-      // getPlants();
+      getPlants();
     } catch (err) {
       console.log("Network error:", err);
     }
@@ -207,11 +214,11 @@ function App() {
       {/* <header className="button-container" > Add Plants Here: </header> */}
       
       {/* ADD PLANTS FORM */}
-      <form className="grid-container" onSubmit={handleSubmit}>
-        <fieldset className="form-container">
+      <form className="grid-container"  onSubmit={handleSubmit}>
+        <fieldset className="form-container" id="plant-container">
           <legend>
             <h3>Add New Plants to your Collection</h3>
-          </legend><br />
+          </legend> <br />
 
           <label className="form-input">
             <span>New Plant:</span>
@@ -222,7 +229,17 @@ function App() {
             value={ formData.plantName }
             placeholder="Your plant here"
             />
-          </label><br/>
+          </label>
+
+          <label className="form-input">
+            <span>Watering Frequency:</span>
+            <input 
+            type="text"
+            onChange={handleInputChange}
+            name="wateringFrequency"
+            value={ formData.wateringFrequency }
+            placeholder="Days until water" />
+          </label>
           
           <label className="form-input">
             <span>Username:</span>
@@ -233,7 +250,7 @@ function App() {
             value={ formData.username }
             placeholder="Username here"
             /> 
-          </label>
+          </label> <br />
 
         {/* <label className="url">Plant Photo</label>
           <input
@@ -243,7 +260,7 @@ function App() {
           placeholder="URL here"
           />  */}
 
-          <button className="submit-btn" type="submit">
+          <button className="submit-btn" type="submit" id="plant-btn">
             Add Plant
           </button>
         </fieldset>
@@ -258,7 +275,7 @@ function App() {
                 {/* <input type="checkbox" id= "myCheck" onChange={handleClick()}/>  */}
                 <button type="submit" className="watered-button" onClick={() => addWater(plant.plantId)}>Watered</button>
                 <div className="card-header">
-                  Last Watered: { plant.lastWatered }
+                  Last Watered: { plant.lastWatered.toString() }
                 </div>
               </div>
           </div>  
@@ -269,8 +286,8 @@ function App() {
 
       <div>
         <button className="openModalBtn"
-        onClick={() =>{
-        setOpenCard(true);
+          onClick={() =>{
+          setOpenCard(true);
         }}>
         Open
         </button>

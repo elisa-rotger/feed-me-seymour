@@ -50,7 +50,7 @@ router.post('/:plants', async function(req, res, next) {
   // let {plantName , username} = req.body; 
 
   try {
-    let sql = `INSERT INTO plantsTable (plantName, username) VALUES ('${req.body.plantName}', '${req.body.username}')`;
+    let sql = `INSERT INTO plantsTable (plantName, username, wateringFrequency) VALUES ('${req.body.plantName}', '${req.body.username}', '${req.body.wateringFrequency}')`;
     await db(sql); 
     let plants = await getAllItems();
     res.status(201).send(plants);
