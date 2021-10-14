@@ -71,6 +71,11 @@
   text-align: center;
   background-color: rgb(26, 114, 45);
   width: 20%;
+  /* flex: none; */
+}
+
+#card {
+  flex: none;
 }
 
 /* .watered-button {

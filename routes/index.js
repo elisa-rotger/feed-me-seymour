@@ -78,21 +78,21 @@ router.delete('/:plants/:plantId', async function(req, res, next) {
 });
 
 /*PUT */
-router.put('/:plants/:plantId', async function(req, res, next) {
-  let { plantName } = req.body; 
-  let { plantId } = req.params; 
+router.put('/plants/:id', async function(req, res, next) {
+  // let { lastWatered } = req.body; 
+  // let { plantId } = req.params.id; 
 
   try {
-    if((await plantExists(plantId)) === false) {
+    if((await plantExists(req.params.id)) === false) {
       res.status(404).send({ error: "Not found" }); 
       return;
     } 
 
-      await db(`UPDATE plantsTable SET plantName ='${plantName}' where plantId = ${plantId}`);
+      await db(`UPDATE plantsTable SET lastWatered = now() where plantId = ${req.params.id}`);
       let plants = await getAllItems();
       res.status(201).send(plants);
     } catch (err) {
-      res.status(500).send({error: err});
+      res.status(500).send({error: err.message});
   }
 });
 

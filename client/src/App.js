@@ -8,8 +8,8 @@ function App() {
   let [plants, setPlants] = useState([]);
   const formInitialState = {plantId: "", plantName: "", username: "", wateringFrequency: "", isWatered: "", lastWatered:"" };
   const [formData, setFormData] = useState(formInitialState); 
-  const currentTime = new Date();
-  const timestamp = currentTime.toLocaleString('en-US', { timeZone: 'America/Chicago' });
+  // const currentTime = new Date();
+  // const timestamp = currentTime.toLocaleString('en-US', { timeZone: 'America/Chicago' });
   const [openCard, setOpenCard] = useState(false);
   const [toSend, setToSend] = useState({
     from_name: '',
@@ -18,7 +18,7 @@ function App() {
     reply_to: '',
   }); 
   
-    // const currentDate = new Date();
+  // const currentDate = new Date();
   // const currentDayOfMonth = currentDate.getDate();
   // const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
   // const currentYear = currentDate.getFullYear();
@@ -66,32 +66,31 @@ function App() {
 
     try {
       await fetch("/plants", options);
-      getPlants();
+      // getPlants();
     } catch (err) {
       console.log("Network error:", err);
     }
   };
 
+  // const handleWater = (plantId) => {
+  //   let timestamp = new Date().toLocaleTimeString('en-US', { timeZone: 'America/Chicago' });
+  //   console.log(timestamp);
+  //   addWater(plantId);
+  // };
 
-  const handleWater = () => {
-    let timestamp = new Date().toLocaleTimeString('en-US', { timeZone: 'America/Chicago' });
-    addWater(formData.plantName, timestamp);
-  };
-
-  const addWater = async (plantName, lastWatered) => {
-    //console.log(plantName)
-    // console.log(plants);
-    let water = { plantName, lastWatered};
-    let options = {
-      method: "PUT",
-      headers: { 
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify(water),
-    };
+  const addWater = async (id) => {
+    console.log(id);
+    // let water = { lastWatered };
+    // let options = {
+    //   method: "PUT",
+    //   headers: { 
+    //     "Content-Type": "application/json" 
+    //   }
+    //   body: JSON.stringify(water),
+    // };
 
     try {
-      await fetch("/plants", options);
+      await fetch(`/plants/${id}`, { method: "PUT" });
       getPlants();
     } catch (err) {
       console.log("Network error:", err);
@@ -253,11 +252,11 @@ function App() {
        
       <div className="card-deck">
         {plants.map(plant => (
-          <div key ={plant.plantId} className="card">
+          <div key ={plant.plantId} className="card" id="card">
               <div className="card-body shadow-border-0">
                 <h5 className="card-title">{ plant.plantName }</h5>               
                 {/* <input type="checkbox" id= "myCheck" onChange={handleClick()}/>  */}
-                <button type="submit" className="watered-button" onClick={handleWater}>Watered</button>
+                <button type="submit" className="watered-button" onClick={() => addWater(plant.plantId)}>Watered</button>
                 <div className="card-header">
                   Last Watered: { plant.lastWatered }
                 </div>

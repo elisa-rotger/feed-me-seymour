@@ -2,15 +2,15 @@ import React from 'react'
 import { useState, useContext } from 'react';
 import "./Modal.css";
 
-const Notification = (props) =>  {
-    const dates = [
-        {
-          id: 0,
-          date: "10/25/21",
-          day: "Monday",
-          time: "5:00 PM"
-        }
-    ]};
+// const Notification = (props) =>  {
+//     const dates = [
+//         {
+//           id: 0,
+//           date: "10/25/21",
+//           day: "Monday",
+//           time: "5:00 PM"
+//         }
+//     ]};
     
 
     
