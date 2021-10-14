@@ -63,7 +63,7 @@
   grid-column: span 2;
 }
 
-/**/
+/* Cards */
 
 .card-deck {
   flex-wrap: wrap;
@@ -85,6 +85,10 @@
 #card {
   flex: none;
   margin-bottom: 1em;
+}
+
+.card-title {
+  font-weight: bold;
 }
 
 /* .watered-button {

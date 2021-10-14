@@ -88,7 +88,7 @@ router.put('/plants/:id', async function(req, res, next) {
       return;
     } 
 
-      await db(`UPDATE plantsTable SET lastWatered = now() where plantId = ${req.params.id}`);
+      await db(`UPDATE plantsTable SET lastWatered = now(), isWatered = 1  where plantId = ${req.params.id}`);
       let plants = await getAllItems();
       res.status(201).send(plants);
     } catch (err) {

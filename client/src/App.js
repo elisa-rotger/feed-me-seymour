@@ -273,9 +273,9 @@ function App() {
               <div className="card-body shadow-border-0">
                 <h5 className="card-title">{ plant.plantName }</h5>               
                 {/* <input type="checkbox" id= "myCheck" onChange={handleClick()}/>  */}
-                <button type="submit" className="watered-button" onClick={() => addWater(plant.plantId)}>Watered</button>
+                <button type="submit" className="watered-button" onClick={() => addWater(plant.plantId)}>Water!</button>
                 <div className="card-header">
-                  Last Watered: { plant.lastWatered.toString() }
+                  Last Watered: { plant.lastWatered.slice(0, 10) }
                 </div>
               </div>
           </div>  
