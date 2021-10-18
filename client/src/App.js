@@ -145,6 +145,42 @@ function App() {
     setToSend({ ...toSend, [e.target.name]: e.target.value });
   };
 
+  //with useEffect, you can make it run a function every X time with setInterval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("Daily checkup!");
+      for (let i=0; i<plants.length; i++) {
+        let hoursDifference = getInterval(plants[i].lastWatered);
+        if(hoursDifference > plants[i].wateringFrequency) {
+            fetch(`/plants2/${plants[i].plantId}`, { method: "PUT" })
+            .then(result => result.JSON)
+            .then (plants => getPlants(plants))
+            .catch(err => console.log("Network error:", err))
+        }
+    }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  //1min in ms = 60000
+  //24h in ms = 43200000
+
+  const getInterval = (originDate) => {
+    let endDate = new Date();
+    originDate = new Date(originDate);
+    let timeDifference = endDate.getTime() - originDate.getTime();
+    return timeDifference / (1000 * 3600 * 24);
+  }
+
+  // //alternative: node-cron lets you schedule any function to a designated set of time
+  // //issues: React doesnt support this feature, so vanilla cron-job doesnt work
+  // var CronJob = require('cron').CronJob;
+  // var job = new CronJob('15 20 * * * *', function() {
+  //   console.log("Scheduled function running!")
+  // }, null, true, 'America/Chicago');
+  // job.start();
+
+
     // function Home() {
   //   return <h2/>;
   // }
@@ -275,7 +311,8 @@ function App() {
                 {/* <input type="checkbox" id= "myCheck" onChange={handleClick()}/>  */}
                 <button type="submit" className="watered-button" onClick={() => addWater(plant.plantId)}>Water!</button>
                 <div className="card-header">
-                  Last Watered: { plant.lastWatered.slice(0, 10) }
+                  Last Watered: { plant.lastWatered.slice(0, 10) } <br />
+                  Needs water every { plant.wateringFrequency } day(s)!
                 </div>
               </div>
           </div>  
@@ -284,7 +321,8 @@ function App() {
 
       </div>
 
-      <div>
+      {/* BUTTON TO OPEN MODAL */}
+      {/* <div>
         <button className="openModalBtn"
           onClick={() =>{
           setOpenCard(true);
@@ -292,7 +330,7 @@ function App() {
         Open
         </button>
         { openCard && <Modal closeCard={setOpenCard} />}
-      </div>
+      </div> */}
 
       {/* EMAIL FORM */}
       <form className="grid-container" onSubmit={onSubmit}>

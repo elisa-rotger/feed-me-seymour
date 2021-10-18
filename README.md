@@ -27,6 +27,9 @@ FeedMeSeymore is an app to help you stay on track with keeping your plants alive
 
 - `cd client` and run `npm install`. This will install client dependencies (React).
 
+- DOES NOT WORK IN REACT. I'm leaving this info here because it's a very useful dependency, although not supported in React for now.
+  `npm install cron`. This module allows for scheduled calls to functions. Needed to keep track of unwatered plants. Install if CronJob is used for this daily check. [https://github.com/kelektiv/node-cron], [https://crontab.guru/examples.html]
+
 ### _Database Prep_
 
 - Access the MySQL interface in your terminal by running `mysql -u root -p`

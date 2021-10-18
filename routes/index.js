@@ -1,4 +1,5 @@
 var express = require('express');
+const { addListener } = require('nodemon');
 var router = express.Router();
 const db = require('../model/helper');
 
@@ -95,5 +96,35 @@ router.put('/plants/:id', async function(req, res, next) {
       res.status(500).send({error: err.message});
   }
 });
+
+
+// ADDING ANOTHER GET, TO THE SAME PLANT LIST, TO ADD A PUT REQUEST TO THE SAME LIST
+
+/* GET plant list. */
+router.get('/plants2', async function(req, res, next) {
+  try {
+    let plants = await getAllItems(); 
+    res.send(plants);
+} catch (err) {
+  res.status(500).send({error: err});
+}
+});
+
+/*PUT */
+router.put('/plants2/:id', async function(req, res, next) {
+  try {
+    if((await plantExists(req.params.id)) === false) {
+      res.status(404).send({ error: "Not found" }); 
+      return;
+    } 
+      await db(`UPDATE plantsTable SET isWatered = 0 where plantId = ${req.params.id}`);
+      let plants = await getAllItems();
+      res.status(201).send(plants);
+    } catch (err) {
+      res.status(500).send({error: err.message});
+  }
+});
+
+
 
 module.exports = router;
