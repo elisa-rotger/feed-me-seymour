@@ -17,11 +17,11 @@ async function plantExists(plantId) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send({ title: 'Express' });
+  res.send("Plants!");
 });
 
 /* GET plant list. */
-router.get('/:plants', async function(req, res, next) {
+router.get('/plants', async function(req, res, next) {
   try {
     let plants = await getAllItems(); 
     res.send(plants);
@@ -31,7 +31,7 @@ router.get('/:plants', async function(req, res, next) {
 });
 
 /* GET one plant */ /* plant-id? */
-router.get('/:plants/:plantId', async function(req, res, next) {
+router.get('/plants/:plantId', async function(req, res, next) {
   let { plantId } = req.params;
   
   try {
@@ -47,7 +47,7 @@ router.get('/:plants/:plantId', async function(req, res, next) {
 });
 
 /* POST new plant*/
-router.post('/:plants', async function(req, res, next) {
+router.post('/plants', async function(req, res, next) {
   // let {plantName , username} = req.body; 
 
   try {
@@ -61,7 +61,7 @@ router.post('/:plants', async function(req, res, next) {
 });
 
 /* DELETE a plant */
-router.delete('/:plants/:plantId', async function(req, res, next) {
+router.delete('/plants/:plantId', async function(req, res, next) {
   let { plantId } = req.params;
 
   try {

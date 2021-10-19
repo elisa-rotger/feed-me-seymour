@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { send } from 'emailjs-com';
-import  Modal from'./Component/Modal';
+// import  Modal from'./Component/Modal';
+import  Login from'./Component/Login';
 //import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams} from 'react-router-dom';
 
 function App() {
-  let [plants, setPlants] = useState([]);
+  const [plants, setPlants] = useState([]);
+  const [status, setStatus] = useState("");
   const formInitialState = {
     plantId: "", 
     plantName: "", 
@@ -15,8 +17,6 @@ function App() {
     lastWatered:"" 
   };
   const [formData, setFormData] = useState(formInitialState); 
-  // const currentTime = new Date();
-  // const timestamp = currentTime.toLocaleString('en-US', { timeZone: 'America/Chicago' });
   const [openCard, setOpenCard] = useState(false);
   const [toSend, setToSend] = useState({
     from_name: '',
@@ -24,16 +24,9 @@ function App() {
     message: '',
     reply_to: '',
   }); 
-  
-  // const currentDate = new Date();
-  // const currentDayOfMonth = currentDate.getDate();
-  // const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-  // const currentYear = currentDate.getFullYear();
-  // const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;  
- 
 
   const getPlants = () => {
-    fetch('/plants')
+    fetch('/index/plants')
       .then((response) => response.json())
       .then((plants) => {
          setPlants(plants);
@@ -46,6 +39,20 @@ function App() {
   useEffect(()=> {
     getPlants();
   }, []);
+
+  // REGISTER & LOGIN
+  
+  function register(newUser) {
+    fetch('/users/register', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newUser)
+    })
+      .then(result => setStatus(result))
+      .catch(err => console.log(err))
+  }
 
   function handleInputChange(event) {
     let { name, value } = event.target;
@@ -72,7 +79,7 @@ function App() {
     };
 
     try {
-      await fetch("/plants", options);
+      await fetch("/index/plants", options);
       getPlants();
     } catch (err) {
       console.log("Network error:", err);
@@ -97,7 +104,7 @@ function App() {
     // };
 
     try {
-      await fetch(`/plants/${id}`, { method: "PUT" });
+      await fetch(`/index/plants/${id}`, { method: "PUT" });
       getPlants();
     } catch (err) {
       console.log("Network error:", err);
@@ -145,22 +152,27 @@ function App() {
     setToSend({ ...toSend, [e.target.name]: e.target.value });
   };
 
+
+  // SCHEDULED FUNCTION CALL TO CHECK IF PLANTS ARE WATERED
+
   //with useEffect, you can make it run a function every X time with setInterval
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("Daily checkup!");
+      // console.log(plants);
       for (let i=0; i<plants.length; i++) {
         let hoursDifference = getInterval(plants[i].lastWatered);
         if(hoursDifference > plants[i].wateringFrequency) {
-            fetch(`/plants2/${plants[i].plantId}`, { method: "PUT" })
-            .then(result => result.JSON)
-            .then (plants => getPlants(plants))
+            fetch(`/index/plants2/${plants[i].plantId}`, { method: "PUT" })
+            .then(result => result.json())
+            .then (plants => setPlants(plants))
             .catch(err => console.log("Network error:", err))
         }
-    }
-    }, 30000);
+      }
+    }, 300000);
     return () => clearInterval(interval);
-  }, []);
+  }, [plants]);
+
 
   //1min in ms = 60000
   //24h in ms = 43200000
@@ -179,31 +191,6 @@ function App() {
   //   console.log("Scheduled function running!")
   // }, null, true, 'America/Chicago');
   // job.start();
-
-
-    // function Home() {
-  //   return <h2/>;
-  // }
-  
-  // function About() {
-  //   return <h2>About</h2>;
-  // }
-  
-  // function Users() {
-  //   return <h2>Kayla's Plant Hutch</h2>;
-  // }
-
-  // function Hutches() {
-  //   return <h2>Plant Hutches</h2>;
-  // }
-
-  // function handleClick() {
-  //   const varCheckBox= document.getElementById("myCheck")
-  //   let newdDate = [...] + plants.lastWatered
-  // }
-
- 
-
 
   return (
     <div className="parent">
@@ -246,9 +233,9 @@ function App() {
       <div className="p-3 mb-2 bg-success text-white">
         <h1 className="title"> Feed Me, Seymore </h1>
       </div>
-    
-      {/* <header className="button-container" > Add Plants Here: </header> */}
-      
+              
+      <Login onRegister={newUser => register(newUser)}/>
+
       {/* ADD PLANTS FORM */}
       <form className="grid-container"  onSubmit={handleSubmit}>
         <fieldset className="form-container" id="plant-container">
