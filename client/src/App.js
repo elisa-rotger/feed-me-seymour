@@ -69,7 +69,6 @@ function App() {
       .then((result) => {
         localStorage.setItem("token", result.token);
         setStatus(result.message);
-        console.log(result.message, result.token)
       })
       .catch((error) => {
         console.log(error);

@@ -44,14 +44,12 @@ router.post('/register', async function(req, res) {
 
 /* POST - LOGIN an existing user */
 router.post('/login', async function (req, res) {
-  const { username, email, password} = req.body;
   try {
-    let results = await db(`SELECT * FROM usersTable WHERE username = "${username}"`)
+    let results = await db(`SELECT * FROM usersTable WHERE username = "${req.body.username}"`)
     const user = results.data[0];
-    console.log(results)
     if(user) {
       let user_id = user.id
-      const correctPassword = await bcrypt.compare(password, user.hash);
+      const correctPassword = await bcrypt.compare(req.body.password, user.password);
       if(!correctPassword) throw new Error('Incorrect password!')
       var token = jwt.sign({ user_id }, secret);
       res.send({ message: "Login successful!", token});
@@ -62,5 +60,16 @@ router.post('/login', async function (req, res) {
     res.status(400).send({ message: err.message })
   }
 })
+
+// router.post('/login', async function (req, res) {
+//   const {username, email, password} = req.body;
+//   await db(`SELECT * FROM usersTable WHERE username = "${username}"`)
+//     .then(results => {
+//       let user = results.data;
+//     })
+//     if(user) {
+//       let user_id = user.id
+//     }
+// })
 
 module.exports = router;
