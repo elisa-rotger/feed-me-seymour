@@ -26,7 +26,8 @@ router.get('/plants', async function(req, res, next) {
     let plants = await getAllItems(); 
     res.send(plants);
 } catch (err) {
-  res.status(500).send({error: err});
+  console.log(err)
+  res.status(500).send({error: err.message});
 }
 });
 

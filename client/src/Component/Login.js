@@ -3,11 +3,12 @@ import { useState } from 'react';
 import "./Login.css";
 
 function Login(props) {
-    const [user, setUser] = useState({
-        userName: "",
+    const emptyUser = {
+        username: "",
         email: "",
         password: ""
-    });
+    }
+    const [user, setUser] = useState(emptyUser);
 
     function handleChange(event) {
         const name = event.target.name;
@@ -21,6 +22,12 @@ function Login(props) {
 
     function register() {
         props.onRegister(user);
+        setUser(emptyUser);
+    }
+
+    function login() {
+        props.onLogin(user);
+        setUser(emptyUser);
     }
 
     return (
@@ -35,8 +42,8 @@ function Login(props) {
                         <span>Username:</span>
                         <input
                         type="text"
-                        name="userName"
-                        value={user.userName}
+                        name="username"
+                        value={user.username}
                         onChange={handleChange} />
                     </label>
 
@@ -58,16 +65,19 @@ function Login(props) {
                         onChange={handleChange} />
                     </label> <br />
 
-                    <button onClick={register}>
+                    <button type="button" onClick={register}>
                         Register
                     </button>
 
-                    <button>
+                    <button type="button" onClick={login}>
                         Log in
                     </button>
                     
                 </fieldset>
             </form>
+            <div>
+                <span>{props.status}</span>
+            </div>
         </div>
     )
 }

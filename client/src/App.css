@@ -82,6 +82,10 @@
   /* flex: none; */
 }
 
+.card-activated {
+  background-color: red;
+}
+
 #card {
   flex: none;
   margin-bottom: 1em;

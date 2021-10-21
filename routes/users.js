@@ -3,6 +3,9 @@ var router = express.Router();
 const db = require('../model/helper');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+var jwt = require('jsonwebtoken');
+
+const secret = process.env.JWT_SECRET;
 
 
 /* GET home page. */
@@ -20,21 +23,42 @@ router.get('/users', async function(req, res) {
 })
 
 /* POST - REGISTER a new user*/ 
-router.post('/users/register', async function(req, res) {
-  const { userName, email, password} = req.body
+router.post('/register', async function(req, res) {
+  const { username, email, password} = req.body;
   try {
-    const hash = await bcrypt.hash(req.body.password, saltRounds)
+    const hash = await bcrypt.hash(password, saltRounds)
     await db(`INSERT INTO usersTable (
       username,
       emailAddress,
       password
     ) VALUES (
-      ${req.body.userName},
-      ${req.body.email},
-      ${hash}
-    )`);
+      "${username}",
+      "${email}",
+      "${hash}"
+    )`)
     res.send({ message: "Register successful!"})
   } catch(err) {
+    res.status(400).send({ message: err.message })
+  }
+})
+
+/* POST - LOGIN an existing user */
+router.post('/login', async function (req, res) {
+  const { username, email, password} = req.body;
+  try {
+    let results = await db(`SELECT * FROM usersTable WHERE username = "${username}"`)
+    const user = results.data[0];
+    console.log(results)
+    if(user) {
+      let user_id = user.id
+      const correctPassword = await bcrypt.compare(password, user.hash);
+      if(!correctPassword) throw new Error('Incorrect password!')
+      var token = jwt.sign({ user_id }, secret);
+      res.send({ message: "Login successful!", token});
+    } else {
+      throw new Error("User doesn't exist!")
+    }
+  } catch (err) {
     res.status(400).send({ message: err.message })
   }
 })

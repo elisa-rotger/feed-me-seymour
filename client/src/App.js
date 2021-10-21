@@ -7,7 +7,7 @@ import  Login from'./Component/Login';
 
 function App() {
   const [plants, setPlants] = useState([]);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Status");
   const formInitialState = {
     plantId: "", 
     plantName: "", 
@@ -17,7 +17,7 @@ function App() {
     lastWatered:"" 
   };
   const [formData, setFormData] = useState(formInitialState); 
-  const [openCard, setOpenCard] = useState(false);
+  // const [openCard, setOpenCard] = useState(false);
   const [toSend, setToSend] = useState({
     from_name: '',
     to_name: '',
@@ -42,22 +42,47 @@ function App() {
 
   // REGISTER & LOGIN
   
-  function register(newUser) {
-    fetch('/users/register', {
+  const handleRegister = async (newUser) => {
+    // console.log(newUser)
+    await fetch('/users/register', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newUser)
     })
-      .then(result => setStatus(result))
+      .then(result => {
+        console.log(result)
+      })
       .catch(err => console.log(err))
+      // console.log(result)
+  }
+
+  const handleLogin = async (newUser) => {
+    await fetch('users/login', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newUser)
+    })
+      .then((result) => {
+        localStorage.setItem("token", result.token);
+        setStatus(result.message);
+        console.log(result.message, result.token)
+      })
+      .catch((error) => {
+        console.log(error);
+        setStatus("Invalid login.")
+      })
   }
 
   function handleInputChange(event) {
     let { name, value } = event.target;
     setFormData({...formData, [name]: value});
   };
+
+  // ADDING NEW PLANTS 
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -103,12 +128,10 @@ function App() {
     //   body: JSON.stringify(water),
     // };
 
-    try {
-      await fetch(`/index/plants/${id}`, { method: "PUT" });
-      getPlants();
-    } catch (err) {
-      console.log("Network error:", err);
-    }
+    await fetch(`/index/plants/${id}`, { method: "PUT" })
+      .then(result => result.json())
+      .then(plants => setPlants(plants))
+      .catch(err => console.log("Network error:", err))
   };
 
   // const addTimestamp = async (plantName, lastWatered) => {
@@ -131,6 +154,7 @@ function App() {
   //   }
   // };
 
+  
   const onSubmit = (e) => {
       e.preventDefault();
       send(
@@ -159,7 +183,6 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("Daily checkup!");
-      // console.log(plants);
       for (let i=0; i<plants.length; i++) {
         let hoursDifference = getInterval(plants[i].lastWatered);
         if(hoursDifference > plants[i].wateringFrequency) {
@@ -169,7 +192,7 @@ function App() {
             .catch(err => console.log("Network error:", err))
         }
       }
-    }, 300000);
+    }, 43200000);
     return () => clearInterval(interval);
   }, [plants]);
 
@@ -234,7 +257,7 @@ function App() {
         <h1 className="title"> Feed Me, Seymore </h1>
       </div>
               
-      <Login onRegister={newUser => register(newUser)}/>
+      <Login onRegister={(newUser) => handleRegister(newUser)} onLogin={(newUser) => handleLogin(newUser)} status={status}/>
 
       {/* ADD PLANTS FORM */}
       <form className="grid-container"  onSubmit={handleSubmit}>
@@ -292,7 +315,7 @@ function App() {
        
       <div className="card-deck">
         {plants.map(plant => (
-          <div key ={plant.plantId} className="card" id="card">
+          <div key ={plant.plantId} className={plant.isWatered ? `card` : `card card-activated`} id="card">
               <div className="card-body shadow-border-0">
                 <h5 className="card-title">{ plant.plantName }</h5>               
                 {/* <input type="checkbox" id= "myCheck" onChange={handleClick()}/>  */}
