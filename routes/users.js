@@ -24,7 +24,7 @@ router.get('/users', async function(req, res) {
 
 /* POST - REGISTER a new user*/ 
 router.post('/register', async function(req, res) {
-  const { username, email, password} = req.body;
+  const { username, email, password } = req.body;
   try {
     const hash = await bcrypt.hash(password, saltRounds)
     await db(`INSERT INTO usersTable (
@@ -36,7 +36,7 @@ router.post('/register', async function(req, res) {
       "${email}",
       "${hash}"
     )`)
-    res.send({ message: "Register successful!"})
+    res.send({ message: "Register successful!" })
   } catch(err) {
     res.status(400).send({ message: err.message })
   }
@@ -48,16 +48,16 @@ router.post('/login', async function (req, res) {
     let results = await db(`SELECT * FROM usersTable WHERE username = "${req.body.username}"`)
     const user = results.data[0];
     if(user) {
-      let user_id = user.id
+      let user_id = user.id;
       const correctPassword = await bcrypt.compare(req.body.password, user.password);
-      if(!correctPassword) throw new Error('Incorrect password!')
+      if(!correctPassword) throw new Error('Incorrect password!');
       var token = jwt.sign({ user_id }, secret);
       res.send({ message: "Login successful!", token});
     } else {
-      throw new Error("User doesn't exist!")
+      throw new Error("User doesn't exist!");
     }
   } catch (err) {
-    res.status(400).send({ message: err.message })
+    res.status(400).send({ message: err.message });
   }
 })
 

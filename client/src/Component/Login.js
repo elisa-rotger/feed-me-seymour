@@ -3,6 +3,7 @@ import { useState } from 'react';
 import "./Login.css";
 
 function Login(props) {
+    console.log(JSON.stringify(props));
     const emptyUser = {
         username: "",
         email: "",
@@ -76,7 +77,7 @@ function Login(props) {
                 </fieldset>
             </form>
             <div>
-                <span>{props.status}</span>
+                <span>{props.status.message}</span>
             </div>
         </div>
     )

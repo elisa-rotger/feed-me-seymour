@@ -7,7 +7,7 @@ import  Login from'./Component/Login';
 
 function App() {
   const [plants, setPlants] = useState([]);
-  const [status, setStatus] = useState("Status");
+  const [status, setStatus] = useState({});
   const formInitialState = {
     plantId: "", 
     plantName: "", 
@@ -51,9 +51,8 @@ function App() {
       },
       body: JSON.stringify(newUser)
     })
-      .then(result => {
-        console.log(result)
-      })
+      .then(result => result.json())
+      .then(status => setStatus(status))
       .catch(err => console.log(err))
       // console.log(result)
   }
@@ -66,14 +65,14 @@ function App() {
       },
       body: JSON.stringify(newUser)
     })
-      .then((result) => {
-        localStorage.setItem("token", result.token);
-        setStatus(result.message);
+      .then(result => result.json())
+      .then(status => {
+        setStatus(status)
       })
       .catch((error) => {
         console.log(error);
-        setStatus("Invalid login.")
-      })
+        setStatus("Invalid login.");
+      });
   }
 
   function handleInputChange(event) {
