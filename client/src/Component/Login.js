@@ -31,6 +31,10 @@ function Login(props) {
         setUser(emptyUser);
     }
 
+    function request() {
+        props.onRequest();
+    }
+
     return (
         <div className="login-wrap">
             <form className="grid-container" id="login">
@@ -66,19 +70,29 @@ function Login(props) {
                         onChange={handleChange} />
                     </label> <br />
 
-                    <button type="button" onClick={register}>
-                        Register
-                    </button>
+                    <div className="button-container">
+                        <button type="button" onClick={register}>
+                            Register
+                        </button>
 
-                    <button type="button" onClick={login}>
-                        Log in
-                    </button>
+                        <button type="button" onClick={login}>
+                            Log in
+                        </button>
+
+                        <button type="button">
+                            Log out
+                        </button>
+                    </div>
                     
                 </fieldset>
+                <div className="message">
+                    <span>{props.status.message}</span>
+                </div>
             </form>
-            <div>
-                <span>{props.status.message}</span>
-            </div>
+
+            <button type="button" className="garden-btn" onClick={request}>
+                See my plants
+            </button>
         </div>
     )
 }

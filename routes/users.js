@@ -4,6 +4,7 @@ const db = require('../model/helper');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var jwt = require('jsonwebtoken');
+const { send } = require('emailjs-com');
 
 const secret = process.env.JWT_SECRET;
 
@@ -61,15 +62,20 @@ router.post('/login', async function (req, res) {
   }
 })
 
-// router.post('/login', async function (req, res) {
-//   const {username, email, password} = req.body;
-//   await db(`SELECT * FROM usersTable WHERE username = "${username}"`)
-//     .then(results => {
-//       let user = results.data;
-//     })
-//     if(user) {
-//       let user_id = user.id
-//     }
-// })
+router.get('/garden', (req, res) => {
+  let token = req.headers['x-access-token'];
+  if(!token) { res.status(401).send({ message: "please provide a token "})}
+  else {
+    jwt.verify(token, secret, function(err, decoded) {
+      if (err) { res.status(401).send({ message: "plase provide a token" })}
+      else {
+        user_id = decoded.user_id;
+        res.send({ user_id: user_id })
+      }
+    })
+  }
 
-module.exports = router;
+
+})
+
+module.exports = router

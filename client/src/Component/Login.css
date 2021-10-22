@@ -26,3 +26,29 @@
 #login-container span{
     width: 5em;
 }
+
+.button-container {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#login-container button {
+    background: white;
+    border: rgb(35, 54, 5) solid 1px;
+    width: 20%;
+    border-radius: 10px
+}
+
+.message {
+    font-weight: bold;
+    text-align: center;
+    padding: 1em 0;
+    font-size: 20px;
+}
+
+.garden-btn {
+    background:rgb(106, 170, 3);
+    width: 100%;
+    padding: 1em 0;
+}
