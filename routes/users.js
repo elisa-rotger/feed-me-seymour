@@ -23,10 +23,17 @@ router.get('/users', async function(req, res) {
       .catch(err => res.status(500).send({ err: err.message }))
 })
 
+router.get('/users/:id', async function (req, res) { 
+  await db(`SELECT * FROM usersTable WHERE id = ${req.params.id}`)
+    .then(results => res.send(results.data) )
+    .catch(err => res.status(500).send({ err: err.message }))
+})
+
 /* POST - REGISTER a new user*/ 
 router.post('/register', async function(req, res) {
   const { username, email, password } = req.body;
   try {
+    // TODO - CHECK IF USER ALREADY EXISTS
     const hash = await bcrypt.hash(password, saltRounds)
     await db(`INSERT INTO usersTable (
       username,

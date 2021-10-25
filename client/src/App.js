@@ -8,12 +8,12 @@ import  Login from'./Component/Login';
 function App() {
   const [plants, setPlants] = useState([]);
   const [status, setStatus] = useState({});
-  const [currentUser, setCurrentUser] = useState({ user_id: 0 });
+  const [currentId, setCurrentId] = useState({ user_id: 0 });
   const formInitialState = {
     plantId: "", 
     plantName: "", 
-    username: "", 
-    wateringFrequency: "", 
+    userId: `${currentId.user_id}`, 
+    wateringFrequency: "",
     isWatered: "", 
     lastWatered:"" 
   };
@@ -75,15 +75,15 @@ function App() {
       });
   }
 
-  function handleRequest() {
-    fetch('/users/garden', {
+  const handleRequest = async () => {
+    await fetch('/users/garden', {
       method: 'GET',
       headers: {
         'x-access-token': localStorage.getItem('token')
       }
     })
       .then(result => result.json())
-      .then(id => setCurrentUser(id))
+      .then(id => setCurrentId(id))
       .catch(err => setStatus({ message: "Not authenticated."}))
   }
 
@@ -98,21 +98,23 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    addPlant(formData.plantName, formData.username, formData.wateringFrequency);
+    addPlant();
     // setPlants((state) => [...state]);
-    setFormData(formInitialState);
+    // setFormData(formInitialState);
   };
 
-  const addPlant = async (plantName, username, wateringFrequency) => {
+  const addPlant = async () => {
     // console.log(plantName)
     // console.log(plants);
-    let plant = { plantName, username, wateringFrequency };
+    formData.userId = currentId.user_id;
+  
+    // let plant = { plantName, wateringFrequency };
     let options = {
       method: "POST",
       headers: { 
         "Content-Type": "application/json" 
       },
-      body: JSON.stringify(plant),
+      body: JSON.stringify(formData),
     };
 
     try {
@@ -121,6 +123,8 @@ function App() {
     } catch (err) {
       console.log("Network error:", err);
     }
+
+    setFormData(formInitialState);
   };
 
   // const handleWater = (plantId) => {
@@ -272,7 +276,7 @@ function App() {
               
 
       {/* if nobody is logged in - only the login will be rendered */}
-      {currentUser.user_id === 0 ? 
+      {currentId.user_id === 0 ? 
       <Login onRegister={(newUser) => handleRegister(newUser)} onLogin={(newUser) => handleLogin(newUser)} onRequest={handleRequest} status={status}/>
       
       // else - when a user has logged in, it will render their plants on the database
@@ -280,7 +284,6 @@ function App() {
         
         {/* ADD NEW PLANTS */}
 
-        {/* TODO - REMOVE THE INPUT FIELD FOR USERNAME - INPUT DIRECTLY THE USER USERNAME AND EMAIL? */}
         <form className="grid-container"  onSubmit={handleSubmit}>
           <fieldset className="form-container" id="plant-container">
             <legend>
@@ -308,7 +311,7 @@ function App() {
               placeholder="Days until water" />
             </label>
             
-            <label className="form-input">
+            {/* <label className="form-input">
               <span>Username:</span>
               <input
               type="text"
@@ -317,7 +320,7 @@ function App() {
               value={ formData.username }
               placeholder="Username here"
               /> 
-            </label> <br />
+            </label> <br /> */}
 
             <button className="submit-btn" type="submit" id="plant-btn">
               Add Plant
@@ -327,9 +330,8 @@ function App() {
           
         {/* DISPLAY OF PLANTS */}
 
-        {/* TODO - ADD FILTERS FOR THE USER THAT HAS LOGGED IN */}
         <div className="card-deck">
-          {plants.map(plant => (
+          {plants.filter(plant => plant.userId === currentId.user_id).map(plant => (
             <div key ={plant.plantId} className={plant.isWatered ? `card` : `card card-activated`} id="card">
                 <div className="card-body shadow-border-0">
                   <h5 className="card-title">{ plant.plantName }</h5>               

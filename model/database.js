@@ -18,18 +18,18 @@ con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
 
-  let sql = "DROP TABLE if exists plantsTable; CREATE TABLE plantsTable (plantId INT NOT NULL AUTO_INCREMENT, plantName VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, wateringFrequency INT NULL, isWatered TINYINT(1) DEFAULT(0) NOT NULL, lastWatered TIMESTAMP  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (plantId));";
-  let sql2 = "DROP TABLE if exists usersTable; CREATE TABLE usersTable (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(255) NOT NULL, emailAddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY (id));";
- con.query(sql, function (err, result) {
+  let sql2 = "DROP TABLE if exists plantsTable; CREATE TABLE plantsTable (plantId INT NOT NULL AUTO_INCREMENT, plantName VARCHAR(255) NOT NULL, userId INT NOT NULL, wateringFrequency INT NULL, isWatered TINYINT(1) DEFAULT(0) NOT NULL, lastWatered TIMESTAMP  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (plantId), FOREIGN KEY (userId) REFERENCES usersTable(id) ON DELETE CASCADE);";
+  let sql1 = "DROP TABLE if exists usersTable; CREATE TABLE usersTable (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(255) NOT NULL, emailAddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY (id));";
+ con.query(sql1, function (err, result) {
     if (err) throw err;
-    console.log("Table creation `plantTables` was successful!");
+    console.log("Table creation `usersTables` was successful!");
 
     console.log("Closing...");
   });
 
   con.query(sql2, function (err, result) {
     if (err) throw err;
-    console.log("Table creation `usersTables` was successful!");
+    console.log("Table creation `plantsTables` was successful!");
 
     console.log("Closing...");
   });
